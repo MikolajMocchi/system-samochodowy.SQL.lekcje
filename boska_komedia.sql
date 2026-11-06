@@ -73,14 +73,14 @@ INNER JOIN Faktury f ON f.id_wypozyczenia = w.id_wypozyczenia
 INNER JOIN Platnosci p ON p.id_faktury = f.id_faktury
 WHERE p.metoda_platnosci IN ('przelew', 'gotówka');
 
--- 13
+-- zad 13
 SELECT DISTINCT f.*
 FROM Faktury f
 INNER JOIN Wypozyczenia w ON w.id_wypozyczenia = f.id_wypozyczenia
 INNER JOIN Opinie o ON o.id_samochodu = w.id_samochodu
 WHERE o.ocena < 4;
 
--- 14
+-- zad 14
 SELECT k.id_klienta, k.imie, k.nazwisko
 FROM Klienci k
 INNER JOIN Wypozyczenia w ON w.id_klienta = k.id_klienta
@@ -90,7 +90,7 @@ HAVING COUNT(DISTINCT o.id_samochodu) >= 2;
 
 --ZADANIA OD 15/18
 
--- 15
+-- zad 15
 SELECT k.id_klienta, k.imie, k.nazwisko,
 COUNT(f.id_faktury) AS liczba_faktur
 FROM Klienci k
@@ -98,19 +98,19 @@ LEFT JOIN Wypozyczenia w ON w.id_klienta = k.id_klienta
 LEFT JOIN Faktury f ON f.id_wypozyczenia = w.id_wypozyczenia
 GROUP BY k.id_klienta, k.imie, k.nazwisko;
 
--- 16
+-- zad 16
 SELECT k.id_klienta, k.imie, k.nazwisko,
 COUNT(o.id_opinii) AS liczba_opinii
 FROM Klienci k
 LEFT JOIN Opinie o ON o.id_klienta = k.id_klienta
 GROUP BY k.id_klienta, k.imie, k.nazwisko;
 
--- 17
+-- zad 17
 SELECT metoda_platnosci, AVG(kwota) AS srednia_kwota
 FROM Platnosci
 GROUP BY metoda_platnosci;
 
--- 18
+-- zad 18
 SELECT MONTH(data_platnosci) AS miesiac,
 COUNT(*) AS liczba_platnosci
 FROM Platnosci
@@ -121,3 +121,21 @@ ORDER BY miesiac;
 
 --ZADANIA OD 19/23
 
+-- zad 19
+SELECT id_faktury, COUNT(*) 
+FROM platnosci 
+GROUP BY id_faktury 
+HAVING COUNT(*) >= 2;
+
+-- zad 20
+SELECT id_samochodu, AVG(ocena) 
+FROM opinie
+GROUP BY id_samochodu;
+
+-- zad 21
+SELECT SUBSTRING_INDEX(adres, ', ', 1) AS miejscowosc, COUNT(*) 
+FROM Klienci 
+JOIN Wypozyczenia USING (id_klienta) 
+JOIN Faktury USING (id_wypozyczenia) 
+WHERE zaplacono = 'tak' 
+GROUP BY miejscowosc;
